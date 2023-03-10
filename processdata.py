@@ -24,7 +24,7 @@ def load_data(name):
         load_X = loadmat('Data/SST_data.mat')['Z'].T
         mean_X = np.mean(load_X, axis=0)
         sst_locs = np.where(mean_X != 0)[0]
-        return load_X[:, sst_locs]
+        return load_X[:, sst_locs], load_X, sst_locs
 
     if name == 'AO3':
         load_X = np.load('Data/short_svd_O3.npy')
