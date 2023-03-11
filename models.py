@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
+from tqdm import tqdm
 
 class SHRED(torch.nn.Module):
     '''SHRED model accepts input size (number of sensors), output size (dimension of high-dimensional spatio-temporal state, hidden_size, number of LSTM layers,
@@ -80,7 +81,7 @@ def fit(model, train_dataset, valid_dataset, batch_size=64, num_epochs=4000, lr=
     val_error_list = []
     patience_counter = 0
     best_params = model.state_dict()
-    for epoch in range(1, num_epochs + 1):
+    for epoch in (pbar := tqdm(range(1, num_epochs + 1))):
         
         for k, data in enumerate(train_loader):
             model.train()
@@ -99,9 +100,10 @@ def fit(model, train_dataset, valid_dataset, batch_size=64, num_epochs=4000, lr=
                 val_error_list.append(val_error)
 
             if verbose == True:
-                print('Training epoch ' + str(epoch))
-                print('Error ' + str(val_error_list[-1]))
-
+                pbar.set_description(f"epoch: {epoch} valid_error: {str(val_error_list[-1])}")        
+                # print('Training epoch ' + str(epoch))
+                # print('Error ' + )
+                
             if val_error == torch.min(torch.tensor(val_error_list)):
                 patience_counter = 0
                 best_params = model.state_dict()
