@@ -24,7 +24,7 @@ def load_data(name):
         load_X = loadmat('Data/SST_data.mat')['Z'].T
         mean_X = np.mean(load_X, axis=0)
         sst_locs = np.where(mean_X != 0)[0]
-        return load_X[:, sst_locs], load_X, sst_locs
+        return load_X[:, sst_locs]
 
     if name == 'AO3':
         load_X = np.load('Data/short_svd_O3.npy')
@@ -34,6 +34,12 @@ def load_data(name):
         load_X = np.load('Data/numpy_isotropic.npy').reshape(-1, 350*350)
         return load_X
 
+def load_full_SST():
+    '''Returns the full 360x180 SST dataset along with SST locations'''
+    full_X = loadmat('Data/SST_data.mat')['Z'].T
+    mean_X = np.mean(full_X, axis=0)
+    sst_locs = np.where(mean_X != 0)[0]
+    return full_X, sst_locs
 
 def qr_place(data_matrix, num_sensors):
     '''Takes a (m x N) data matrix consisting of N samples of an m dimensional state and
